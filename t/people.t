@@ -1,12 +1,22 @@
 #!perl
 use strict;
 use warnings;
+use LWP::Online ':skip_all';
+
+# Skip online tests if we can't contact the Flickr::API..
+BEGIN {
+    require Test::More;
+    unless ( LWP::Online::online() ) {
+        Test::More->import(
+            skip_all => 'Test requires a working internet connection'
+        );
+    }
+}
+
 use Test::More;
 use Test::Exception;
 
 use_ok('Flickr::API2') or die;
-
-# TODO: Skip online tests if we can't contact the Flickr::API..
 
 my $api = new Flickr::API2(
     {
@@ -17,8 +27,10 @@ my $api = new Flickr::API2(
 
 # Find by username
 my $user = $api->people->findByUsername('wintrmute');
+isa_ok($user, 'Flickr::API2::User');
 is($user->username, 'Wintrmute', "Found me by username");
 
+# TODO: Improve the way info is returned..
 my $info = $user->getInfo;
 is($info->{realname}->{_content}, 'Toby Corkindale',
    ".. and they know my name"
@@ -26,6 +38,7 @@ is($info->{realname}->{_content}, 'Toby Corkindale',
 
 my @pics = $user->getPublicPhotos(per_page => 3);
 is(scalar(@pics), 3, "Three pics from user returned");
+isa_ok($pics[0], 'Flickr::API2::Photo');
 ok($pics[0]->id, "First picture has an ID");
 
 # Find by email address (don't have a valid email to test with yet)
