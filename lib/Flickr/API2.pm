@@ -9,7 +9,7 @@ use Flickr::API2::Interestingness;
 use Flickr::API2::People;
 use Flickr::API2::Raw;
 
-our $VERSION = '2.05';
+our $VERSION = '2.06';
 
 sub new {
     my $class   = shift;
@@ -82,6 +82,11 @@ Flickr::API2 - Perl interface to the Flickr API
   for my $photo (@photos) {
     say "Title is " . $photo->title;
   }
+
+  Individual photos can be retrieved by id like so:
+
+  my $p = $api->photos->by_id(1122334455);
+  say "Medium JPEG is " . $p->url_m;
 
   To access the raw flickr API, use methods like:
 
