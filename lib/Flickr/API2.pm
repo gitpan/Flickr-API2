@@ -1,7 +1,7 @@
 package Flickr::API2;
+use 5.10.1;
 use strict;
 use warnings;
-use 5.008008; # Earlier versions cause JSON bugs to manifest.
 use Flickr::API2::Request;
 use Flickr::API2::Photos;
 use Flickr::API2::Test;
@@ -9,7 +9,7 @@ use Flickr::API2::Interestingness;
 use Flickr::API2::People;
 use Flickr::API2::Raw;
 
-our $VERSION = '2.09';
+our $VERSION = '2.10';
 
 sub new {
     my $class   = shift;
@@ -19,7 +19,7 @@ sub new {
       unless $options->{key} and $options->{secret};
 
     my $self = {
-        _raw => Flickr::API2::Raw->new($options),
+        _raw     => Flickr::API2::Raw->new($options),
         rest_uri => $options->{rest_uri}
           || 'https://api.flickr.com/services/rest/',
     };
@@ -30,7 +30,7 @@ sub new {
 sub execute_method {
     my ( $self, $method, $args ) = @_;
 
-    my $request = new Flickr::API2::Request(
+    my $request = Flickr::API2::Request->new(
         {
             method   => $method,
             args     => $args,
@@ -63,6 +63,8 @@ sub people {
 
 1;
 __END__
+
+=encoding utf8
 
 =head1 NAME
 
@@ -170,7 +172,7 @@ https://github.com/TJC/Flickr-API2
 
 =head1 AUTHOR
 
-Version 2.xx copyright 2011 Toby Corkindale, tjc@cpan.org
+Version 2.xx copyright © 2011-2014 Toby Corkindale, E<lt>tjc@wintrmute.netE<gt>
 
 Original version 1.xx copyright (C) 2004-2005, Cal Henderson, E<lt>cal@iamcal.comE<gt>
 
